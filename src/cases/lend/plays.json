@@ -1,0 +1,14 @@
+{
+  "tape1": {
+    "name": "tape1",
+    "type": "tragedy"
+  },
+  "tape2": {
+    "name": "tape2",
+    "type": "comedy"
+  },
+  "tape3": {
+    "name": "tape3",
+    "type": "tragedy"
+  }
+}
