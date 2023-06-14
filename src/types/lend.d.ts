@@ -1,6 +1,7 @@
 declare type CPerformance = {
   playID: string;
   audience: number;
+  play: Play
 };
 
 declare type Invoice = {

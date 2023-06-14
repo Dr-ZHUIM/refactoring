@@ -6,8 +6,16 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
   return renderPlainText(statementData,plays);
 
   function enrichPerformance(performance:CPerformance){
-    return Object.assign({},performance)
+    const result = Object.assign({},performance);
+    result.play = getPlay(result);
+    return result;
   }
+
+  function getPlay(perf:CPerformance){
+    return plays[perf.playID]
+  }
+
+
 }
 
 function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
@@ -22,14 +30,10 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
   result["statement"] += `You earned ${calcTotalCredits()} credits\n`;
   return result;
 
-  function getPlay(perf:CPerformance){
-    return plays[perf.playID]
-  }
-
   function getCredit(perf:CPerformance){
     let result = 0;
     result += Math.max(perf.audience - 30, 0);
-    if (getPlay(perf).type === 'comedy') result += Math.floor(perf.audience / 5);
+    if (perf.play.type === 'comedy') result += Math.floor(perf.audience / 5);
     return result;
   }
 
@@ -51,7 +55,7 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
   
   function calcAmount (perf:CPerformance){
     let result = 0;
-      switch (getPlay(perf).type) {
+      switch (perf.play.type) {
         case 'tragedy': {
           result = 40000;
           if (perf.audience > 30) {
@@ -68,7 +72,7 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
           break;
         }
         default: {
-          throw new Error(`unknown type: ${getPlay(perf).type}`);
+          throw new Error(`unknown type: ${perf.play.type}`);
         }
       }
       return result;
@@ -84,10 +88,10 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
 
   function updateResult(){
     for (let perf of data.performances) {
-      result["playsList"].push(getPlay(perf).name);
+      result["playsList"].push(perf.play.name);
       result["playsAmount"].push(usd(calcAmount(perf)));
-      result["playsEntry"].push({ [getPlay(perf).name]: usd(calcAmount(perf)) })
-      result["statement"] += `  ${getPlay(perf).name}: ${usd(calcAmount(perf))} (${perf.audience
+      result["playsEntry"].push({ [perf.play.name]: usd(calcAmount(perf)) })
+      result["statement"] += `  ${perf.play.name}: ${usd(calcAmount(perf))} (${perf.audience
         } seats)\n`;
     }
   }
