@@ -1,4 +1,4 @@
-import { statement } from './methods-2';
+import { statement } from './statement';
 import { json } from '../../utils/fetch';
 import { describe, expect, test } from '@jest/globals';
 
