@@ -1,8 +1,11 @@
 declare type CPerformance = {
   playID: string;
   audience: number;
-  play: Play
+  play?: Play;
+  amount?: number
 };
+
+declare type CPerformanceEnriched = Required<CPerformance>
 
 declare type Invoice = {
   customer: string;
