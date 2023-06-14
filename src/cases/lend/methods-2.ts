@@ -1,6 +1,14 @@
 function statement(invoice: Invoice, plays: Record<string, Play>) {
+  const statementData = {
+    customer: invoice.customer,
+    performances: invoice.performances
+  }
+  return renderPlainText(statementData,plays)
+}
+
+function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
   let result:LendRes = {
-    statement: `Statement for ${invoice.customer}\n`,
+    statement: `Statement for ${data.customer}\n`,
     playsAmount: [],
     playsList: [],
     playsEntry: []
@@ -23,7 +31,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
 
   function calcTotalCredits(){
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += getCredit(perf);
     }
     return result;
@@ -31,7 +39,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
 
   function calcTotalAmount(){
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += calcAmount(perf);
     }
     return result;
@@ -60,7 +68,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
         }
       }
       return result;
-  }
+  }             
 
   function usd(num:number){
     return new Intl.NumberFormat('en-US', {
@@ -71,7 +79,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
   }
 
   function updateResult(){
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result["playsList"].push(getPlay(perf).name);
       result["playsAmount"].push(usd(calcAmount(perf)));
       result["playsEntry"].push({ [getPlay(perf).name]: usd(calcAmount(perf)) })
@@ -79,7 +87,6 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
         } seats)\n`;
     }
   }
-  
 }
 
 export { statement };
