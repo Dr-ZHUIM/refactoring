@@ -2,7 +2,8 @@ declare type CPerformance = {
   playID: string;
   audience: number;
   play?: Play;
-  amount?: number
+  amount?: number;
+  volumnCredit?: number
 };
 
 declare type CPerformanceEnriched = Required<CPerformance>

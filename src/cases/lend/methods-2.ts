@@ -9,6 +9,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
     const result = Object.assign({},performance) as CPerformanceEnriched;
     result.play = getPlay(result);
     result.amount = calcAmount(result);
+    result.volumnCredit = calcCredit(result);
     return result;
   }
 
@@ -39,7 +40,15 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
         }
       }
       return result;
-  }             
+  }         
+  
+  function calcCredit(perf:CPerformanceEnriched){
+    let result = 0;
+    result += Math.max(perf.audience - 30, 0);
+    if (perf.play.type === 'comedy') result += Math.floor(perf.audience / 5);
+    return result;
+  }
+
 
 
 }
@@ -56,17 +65,10 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
   result["statement"] += `You earned ${calcTotalCredits()} credits\n`;
   return result;
 
-  function getCredit(perf:CPerformanceEnriched){
-    let result = 0;
-    result += Math.max(perf.audience - 30, 0);
-    if (perf.play.type === 'comedy') result += Math.floor(perf.audience / 5);
-    return result;
-  }
-
   function calcTotalCredits(){
     let result = 0;
     for (let perf of data.performances) {
-      result += getCredit(perf);
+      result += perf.credit;
     }
     return result;
   }
@@ -78,31 +80,6 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
     }
     return result;
   }
-  
-  function calcAmount (perf:CPerformanceEnriched){
-    let result = 0;
-      switch (perf.play.type) {
-        case 'tragedy': {
-          result = 40000;
-          if (perf.audience > 30) {
-            result += 1000 * (perf.audience - 30);
-          }
-          break;
-        }
-        case 'comedy': {
-          result = 30000;
-          if (perf.audience > 20) {
-            result += 10000 + 500 * (perf.audience - 20);
-          }
-          result += 300 * perf.audience;
-          break;
-        }
-        default: {
-          throw new Error(`unknown type: ${perf.play.type}`);
-        }
-      }
-      return result;
-  }             
 
   function usd(num:number){
     return new Intl.NumberFormat('en-US', {
