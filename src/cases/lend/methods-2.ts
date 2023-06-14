@@ -1,9 +1,13 @@
 function statement(invoice: Invoice, plays: Record<string, Play>) {
   const statementData = {
     customer: invoice.customer,
-    performances: invoice.performances
+    performances: invoice.performances.map(enrichPerformance)
   }
-  return renderPlainText(statementData,plays)
+  return renderPlainText(statementData,plays);
+
+  function enrichPerformance(performance:CPerformance){
+    return Object.assign({},performance)
+  }
 }
 
 function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
