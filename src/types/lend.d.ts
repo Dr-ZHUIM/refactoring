@@ -3,10 +3,19 @@ declare type CPerformance = {
   audience: number;
   play?: Play;
   amount?: number;
-  volumnCredit?: number
+  volumnCredits?: number;
+  totalCredits?: number;
+  totalAmount?: number
 };
 
 declare type CPerformanceEnriched = Required<CPerformance>
+
+declare type StatementData = {
+  customer: string,
+  performances: CPerformanceEnriched[],
+  totalCredits: number,
+  totalAmount: number
+}
 
 declare type Invoice = {
   customer: string;

@@ -1,15 +1,19 @@
 function statement(invoice: Invoice, plays: Record<string, Play>) {
-  const statementData = {
+  const statementData:StatementData = {
     customer: invoice.customer,
-    performances: invoice.performances.map(enrichPerformance)
-  }
+    performances: invoice.performances.map(enrichPerformance),
+    totalCredits: 0,
+    totalAmount: 0
+  };
+  statementData.totalCredits = calcTotalCredits(statementData);
+  statementData.totalAmount = calcTotalAmount(statementData);
   return renderPlainText(statementData,plays);
 
   function enrichPerformance(performance:CPerformance){
     const result = Object.assign({},performance) as CPerformanceEnriched;
     result.play = getPlay(result);
     result.amount = calcAmount(result);
-    result.volumnCredit = calcCredit(result);
+    result.volumnCredits = calcCredit(result);
     return result;
   }
 
@@ -49,11 +53,25 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
     return result;
   }
 
+  function calcTotalCredits(data:StatementData){
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.volumnCredits;
+    }
+    return result;
+  }
 
+  function calcTotalAmount(data:StatementData){
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
 
 }
 
-function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
+function renderPlainText(data:StatementData,plays: Record<string, Play>):LendRes{
   let result:LendRes = {
     statement: `Statement for ${data.customer}\n`,
     playsAmount: [],
@@ -61,25 +79,9 @@ function renderPlainText(data:any,plays: Record<string, Play>):LendRes{
     playsEntry: []
   }
   updateResult();
-  result["statement"] += `Amount owed is ${usd(calcTotalAmount())}\n`;
-  result["statement"] += `You earned ${calcTotalCredits()} credits\n`;
+  result["statement"] += `Amount owed is ${usd(data.totalAmount)}\n`;
+  result["statement"] += `You earned ${data.totalCredits} credits\n`;
   return result;
-
-  function calcTotalCredits(){
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.credit;
-    }
-    return result;
-  }
-
-  function calcTotalAmount(){
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.amount;
-    }
-    return result;
-  }
 
   function usd(num:number){
     return new Intl.NumberFormat('en-US', {
