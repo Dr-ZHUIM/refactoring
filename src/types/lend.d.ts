@@ -4,8 +4,6 @@ declare type CPerformance = {
   play?: Play;
   amount?: number;
   volumnCredits?: number;
-  totalCredits?: number;
-  totalAmount?: number
 };
 
 declare type CPerformanceEnriched = Required<CPerformance>

@@ -8,7 +8,7 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
   statementData.totalCredits = calcTotalCredits(statementData);
   statementData.totalAmount = calcTotalAmount(statementData);
   return renderPlainText(statementData,plays);
-
+9
   function enrichPerformance(performance:CPerformance){
     const result = Object.assign({},performance) as CPerformanceEnriched;
     result.play = getPlay(result);
@@ -54,19 +54,11 @@ function statement(invoice: Invoice, plays: Record<string, Play>) {
   }
 
   function calcTotalCredits(data:StatementData){
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.volumnCredits;
-    }
-    return result;
+    return data.performances.reduce((total,p)=>total + p.volumnCredits,0)
   }
 
   function calcTotalAmount(data:StatementData){
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.amount;
-    }
-    return result;
+    return data.performances.reduce((total,p)=>total + p.amount,0)
   }
 
 }
