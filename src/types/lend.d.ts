@@ -6,14 +6,14 @@ declare type CPerformance = {
   volumnCredits?: number;
 };
 
-declare type CPerformanceEnriched = Required<CPerformance>
+declare type CPerformanceEnriched = Required<CPerformance>;
 
 declare type StatementData = {
-  customer: string,
-  performances: CPerformanceEnriched[],
-  totalCredits: number,
-  totalAmount: number
-}
+  customer: string;
+  performances: CPerformanceEnriched[];
+  totalCredits: number;
+  totalAmount: number;
+};
 
 declare type Invoice = {
   customer: string;
@@ -22,7 +22,7 @@ declare type Invoice = {
 
 declare type Play = {
   name: string;
-  type: "tragedy" | "comedy";
+  type: 'tragedy' | 'comedy';
 };
 
 declare type LendRes = {
@@ -30,4 +30,4 @@ declare type LendRes = {
   playsAmount: string[];
   playsList: string[];
   playsEntry: Record<string, string>[];
-}
+};

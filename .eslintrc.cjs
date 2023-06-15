@@ -17,7 +17,12 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: [
+    '.eslintrc.cjs',
+    'jest-esm.config.mjs',
+    'jest.config.cjs',
+    'babel.config.js',
+  ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

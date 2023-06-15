@@ -1,3 +1,3 @@
 declare type FetchJsonOption = {
-  parse?: boolean,
-}
+  parse?: boolean;
+};
