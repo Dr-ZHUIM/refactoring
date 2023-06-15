@@ -22,7 +22,7 @@ declare type Invoice = {
 
 declare type Play = {
   name: string;
-  type: string;
+  type: "tragedy" | "comedy";
 };
 
 declare type LendRes = {

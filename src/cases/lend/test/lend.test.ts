@@ -1,10 +1,10 @@
-import { statement } from './statement';
-import { json } from '../../utils/fetch';
+import { statement } from '../statement';
+import { json } from '../../../utils/fetch';
 import { describe, expect, test } from '@jest/globals';
 
 function execution() {
-  const invoices = json("/cases/lend/invoices.json",true);
-  const plays = json("/cases/lend/plays.json",true);
+  const invoices = json("/cases/lend/data/invoices.json",true);
+  const plays = json("/cases/lend/data/plays.json",true);
   const res = statement(invoices[0],plays);
   return res;
 }

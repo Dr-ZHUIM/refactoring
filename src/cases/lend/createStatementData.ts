@@ -1,4 +1,4 @@
-import { PerformanceCalculator } from "./class";
+import { Clac } from "./class";
 export default function createStatementData(invoice: Invoice, plays: Record<string, Play>){
   const statementData:StatementData = {
     customer: invoice.customer,
@@ -38,5 +38,10 @@ export default function createStatementData(invoice: Invoice, plays: Record<stri
 
 
 function createPerformanceCalculator(perf:CPerformance,play:Play){
-  return new PerformanceCalculator(perf,play);
+  switch(play.type){
+    case "tragedy" : return new Clac.TragedyCalculator(perf,play);
+    case "comedy" : return new Clac.ComedyCalculator(perf,play);
+    default: 
+      throw new Error(`unknown type: ${play.type}`)
+  }
 }
